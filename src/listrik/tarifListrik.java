@@ -2,7 +2,7 @@ package listrik;
 
 import java.util.Scanner;
 public class tarifListrik {
-    public static double[] tagihanListrik(int kwh, int golongan) {
+    public static double[] tagihanListrik(double kwh, int golongan) {
         double biayaPemakaian,total,ppj,tarifPerkwh;
         String va;
         int biayaAdmin = 3000;
@@ -70,7 +70,7 @@ public class tarifListrik {
     public static void main(String [] args) {
         Scanner input = new Scanner(System.in);
         System.out.print("Masukkan pemakaian listik anda (kWh) : ");
-        int pakaiKwh = input.nextInt();
+        double pakaiKwh = input.nextDouble();
         if (pakaiKwh < 0) {
             System.out.println("Input yang dimasukkan tidak valid");
         }

@@ -31,7 +31,7 @@ public class MainGUI extends javax.swing.JFrame {
 
         txtKwh = new java.awt.TextField();
         cmbGolongan = new javax.swing.JComboBox<>();
-        btnSubmit = new javax.swing.JButton();
+        btnHitung = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -54,8 +54,8 @@ public class MainGUI extends javax.swing.JFrame {
 
         cmbGolongan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "450 VA", "900 VA (Subsidi)", "900 VA (Rumah Tangga Mampu)", "1300 VA", "2200 VA", ">3500 VA" }));
 
-        btnSubmit.setText("Submit");
-        btnSubmit.addActionListener(this::btnSubmitActionPerformed);
+        btnHitung.setText("Hitung");
+        btnHitung.addActionListener(this::btnHitungActionPerformed);
 
         jLabel1.setText("Kalkulator Tarif Tagihan Listrik");
 
@@ -151,7 +151,7 @@ public class MainGUI extends javax.swing.JFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(btnSubmit)
+                            .addComponent(btnHitung)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                             .addComponent(btnReset))
                         .addComponent(jLabel2)
@@ -179,7 +179,7 @@ public class MainGUI extends javax.swing.JFrame {
                 .addComponent(cmbGolongan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSubmit)
+                    .addComponent(btnHitung)
                     .addComponent(btnReset))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -193,15 +193,18 @@ public class MainGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtKwhActionPerformed
 
-    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
-        try { //error handling with try catch
-            int kwh = Integer.parseInt(txtKwh.getText().trim());
+    private void btnHitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHitungActionPerformed
+        try { //error input handling on txtKwh
+            String rawInput = txtKwh.getText().trim().replace(",", "."); // replace "," to "."
+            double kwh = Double.parseDouble(rawInput); // Data type conversion from str to double
             if (kwh <= 0){ // value check
                 javax.swing.JOptionPane.showMessageDialog(this, "Pemakaian Kwh harus lebih dari nol!");
                 return;
             }
             int golongan = cmbGolongan.getSelectedIndex() +1; // index count +1
-            double[] hasil = tarifListrik.tagihanListrik(kwh, golongan); // cacth return value from tariflistrik
+            double[] hasil = tarifListrik.tagihanListrik(kwh, golongan); // cacth return value from tarifListrik
+            
+            // print out to lable
             lblTarif.setText(String.format("Rp %,.2f", hasil[0]));
             lblBiayaPemakaian.setText(String.format("Rp %,.2f", hasil[1]));
             lblPpj.setText(String.format("Rp %,.2f", hasil[2]));
@@ -210,19 +213,20 @@ public class MainGUI extends javax.swing.JFrame {
         } catch (NumberFormatException e){
             javax.swing.JOptionPane.showMessageDialog(this, "Masukkan angka yang valid pada kolom kWh!");
         }
-    }//GEN-LAST:event_btnSubmitActionPerformed
+    }//GEN-LAST:event_btnHitungActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        txtKwh.setText(""); //reset txtKwh value
-        cmbGolongan.setSelectedIndex(0); 
+        txtKwh.setText(""); //reset txtKwh component value 
+        cmbGolongan.setSelectedIndex(0);
         
-        // reset label value
+        // set label componen to 0
         lblTarif.setText("Rp 0");
         lblBiayaPemakaian.setText("Rp 0");
         lblPpj.setText("Rp 0");
         lblAdmin.setText("Rp 0");
         lblTotal.setText("Rp 0");
         
+        // keyboard focus to txtKwh component
         txtKwh.requestFocus();
     }//GEN-LAST:event_btnResetActionPerformed
 
@@ -252,8 +256,8 @@ public class MainGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnHitung;
     private javax.swing.JButton btnReset;
-    private javax.swing.JButton btnSubmit;
     private javax.swing.JComboBox<String> cmbGolongan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
